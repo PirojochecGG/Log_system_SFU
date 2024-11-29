@@ -1,0 +1,34 @@
+/* Ограничение высоты для таблиц */
+#operationsTable, #productsTable {
+    max-height: 400px;
+    overflow-y: auto;
+    display: block;
+    width: 100%;
+}
+
+/* Приятный скролл */
+#operationsTable::-webkit-scrollbar, #productsTable::-webkit-scrollbar {
+    width: 8px;
+}
+
+#operationsTable::-webkit-scrollbar-thumb, #productsTable::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 10px;
+}
+
+#operationsTable::-webkit-scrollbar-thumb:hover, #productsTable::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+/* Закрепление заголовков таблиц */
+thead th {
+    position: sticky;
+    top: 0;
+    background-color: #fff; /* Белый фон для заголовков */
+    z-index: 1; /* Обеспечивает, чтобы заголовки были поверх контента */
+}
+
+/* Применение фона для столбцов таблицы при прокрутке */
+#operationsTable th, #productsTable th {
+    background-color: #f8f9fa;
+}

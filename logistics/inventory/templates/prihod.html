@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_js %}
+    <script src="{% static 'js/html5-qrcode.min.js' %}"></script>
+    <script src="{% static 'js/prihod.js' %}" defer></script>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/prihod.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <div class="operation-section mb-5">
+        <button id="accept-product-btn" class="btn btn-primary">Принять товар</button>
+    </div>
+    <div id="qr-reader-container" style="display: none; margin-top: 20px;">
+        <h3>Сканируйте QR-код</h3>
+        <div id="qr-reader" style="width: 100%, max-width: 400px"></div>
+        <button id="stop-scan-btn" class="btn btn-danger mt-3">Остановить сканирование</button>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <table class="table table-striped" id="operationsTable">
+                <thead>
+                    <tr>
+                        <th>Номер</th>
+                        <th>Дата</th>
+                        <th>Дата документа</th>
+                        <th>Тип</th>
+                        <th>Сумма руб</th>
+                        <th>Контрагент</th>
+                        <th>Место хранения</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for operation in operations %}
+                    <tr data-operation-id="{{ operation.id }}">
+                        <td>{{ operation.number }}</td>
+                        <td>{{ operation.date }}</td>
+                        <td>{{ operation.doc_date }}</td>
+                        <td>{{ operation.get_type_display }}</td>
+                        <td>{{ operation.total_amount }}</td>
+                        <td>{{ operation.counterparty }}</td>
+                        <td>{{ operation.storage_location }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <h3>Товары:</h3>
+    <div id="productsTableContainer" class="row" style="display: none;">
+        <div class="col-md-6">
+            <table class="table table-striped" id="productsTable">
+                <thead>
+                    <tr>
+                        <th>Код</th>
+                        <th>Название</th>
+                        <th>Количество</th>
+                        <th>Единицы</th>
+                        <th>Цена (руб)</th>
+                        <th>Сумма (руб)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Данные для товаров будут динамически добавляться -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

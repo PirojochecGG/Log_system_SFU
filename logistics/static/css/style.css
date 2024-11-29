@@ -1,0 +1,18 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+header nav a {
+    text-decoration: none;
+    color: #000;
+    font-weight: bold;
+}
+
+header nav a:hover {
+    text-decoration: underline;
+}
+
+.highlighted {
+    background-color: #f0f8ff; /* Легкий синий фон для выделенной строки */
+    border: 2px solid #007bff; /* Синий цвет рамки */
+}

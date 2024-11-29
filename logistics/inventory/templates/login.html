@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Вход{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/login.js' %}" defer></script>
+{% endblock %}
+
+{% block content %}
+    <div class="login-container">
+        <h1>Вход</h1>
+        <form method="post" action="/login/">
+            {% csrf_token %}
+            <input type="email" name="email" placeholder="email" required id="id_email">
+            <div class="password-container">
+                <input type="password" name="password" placeholder="Пароль" required id="id_password">
+                <button type="button" id="toggle-password-visibility">
+                    <img src="{% static 'img/eye-icon.png' %}" alt="Показать пароль">
+                </button>
+            </div>
+            <button type="submit">Войти</button>
+        </form>
+        <p>
+            Забыли пароль? <a href="/password_reset">Восстановить</a>
+        </p>
+    </div>
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

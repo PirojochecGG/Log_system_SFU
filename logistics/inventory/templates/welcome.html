@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Добро пожаловать{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/welcome.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="welcome-container">
+    <h1>Добро пожаловать в систему логистики!</h1>
+    <p>Для продолжения, пожалуйста, выполните вход.</p>
+    <button onclick="window.location.href='/login/'">Войти</button>
+</div>
+{% endblock %}
