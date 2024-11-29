@@ -1,4 +1,3 @@
-/* Ограничение высоты для таблиц */
 #operationsTable, #productsTable {
     max-height: 400px;
     overflow-y: auto;
@@ -6,7 +5,6 @@
     width: 100%;
 }
 
-/* Приятный скролл */
 #operationsTable::-webkit-scrollbar, #productsTable::-webkit-scrollbar {
     width: 8px;
 }
@@ -20,15 +18,13 @@
     background-color: #555;
 }
 
-/* Закрепление заголовков таблиц */
 thead th {
     position: sticky;
     top: 0;
-    background-color: #fff; /* Белый фон для заголовков */
-    z-index: 1; /* Обеспечивает, чтобы заголовки были поверх контента */
+    background-color: #fff; 
+    z-index: 1; 
 }
 
-/* Применение фона для столбцов таблицы при прокрутке */
 #operationsTable th, #productsTable th {
     background-color: #f8f9fa;
 }

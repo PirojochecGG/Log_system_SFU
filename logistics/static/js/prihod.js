@@ -91,11 +91,10 @@ document.addEventListener('DOMContentLoaded', function () {
         qrReader.start(
             { facingMode: "environment" }, // Запускаем заднюю камеру (если доступно)
             {
-                fps: 30, // Частота кадров
-                qrbox: { width: 250, height: 250 }, // Область считывания
+                fps: 30,
+                qrbox: { width: 250, height: 250 },
             },
             (decodedText) => {
-                // QR-код успешно считан
                 alert("Считано: " + decodedText);
                 fetch('/add_product/', {
                     method: 'POST',

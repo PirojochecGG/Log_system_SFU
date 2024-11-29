@@ -9,13 +9,11 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         fake = Faker('ru_RU')
         
-        # Очистка таблиц перед добавлением данных
         Product.objects.all().delete()
         Operation.objects.all().delete()
         OperationProduct.objects.all().delete()
         
-        # Чтение списка названий товаров из файла
-        file_path = 'products.txt'  # Укажи путь к своему файлу
+        file_path = 'products.txt'
         with open(file_path, 'r', encoding='utf-8') as file:
             product_names = [line.strip() for line in file if line.strip()]
 
@@ -23,10 +21,9 @@ class Command(BaseCommand):
             self.stdout.write(self.style.ERROR('Файл с товарами пуст или отсутствуют валидные строки.'))
             return
         
-        # Создание товаров
         products = []
         for _ in range(100):
-            name = random.choice(product_names)  # Случайный товар из списка
+            name = random.choice(product_names)
             product = Product.objects.create(
                 code=fake.unique.ean(length=8),
                 name=name,
@@ -37,7 +34,6 @@ class Command(BaseCommand):
             products.append(product)
         self.stdout.write(self.style.SUCCESS(f'Создано {len(products)} товаров.'))
 
-        # Создание операций
         operations = []
         for _ in range(100):
             operation = Operation.objects.create(
@@ -50,7 +46,6 @@ class Command(BaseCommand):
             operations.append(operation)
         self.stdout.write(self.style.SUCCESS(f'Создано {len(operations)} операций.'))
 
-        # Связывание товаров с операциями
         for operation in operations:
             total_amount = 0
             for _ in range(random.randint(1, 5)):

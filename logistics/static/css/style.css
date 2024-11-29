@@ -13,6 +13,6 @@ header nav a:hover {
 }
 
 .highlighted {
-    background-color: #f0f8ff; /* Легкий синий фон для выделенной строки */
-    border: 2px solid #007bff; /* Синий цвет рамки */
+    background-color: #f0f8ff;
+    border: 2px solid #007bff;
 }

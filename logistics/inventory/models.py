@@ -17,7 +17,6 @@ class Operation(models.Model):
 
     @property
     def total_amount(self):
-         # Сумма = количество * цена для всех связанных товаров
         total = self.operation_products.aggregate(
             total=Sum(F('quantity') * F('product__price'))
         )['total']

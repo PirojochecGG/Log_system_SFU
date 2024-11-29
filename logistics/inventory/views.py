@@ -78,12 +78,10 @@ def login_view(request):
 
 def password_reset(request):
     if request.method == "POST":
-        # Получение данных из формы
         first_name = request.POST.get("first_name")
         last_name = request.POST.get("last_name")
         email = request.POST.get("email")
         
-        # Формирование сообщения
         subject = "Восстановление пароля"
         message = (
             f"Запрос на восстановление пароля от пользователя:\n\n"
@@ -93,7 +91,6 @@ def password_reset(request):
             f"Пожалуйста, свяжитесь с этим пользователем для восстановления доступа."
         )
         
-        # Отправка письма администратору
         admin_email = settings.ADMIN_EMAIL
         send_mail(
             subject=subject,
@@ -102,7 +99,6 @@ def password_reset(request):
             recipient_list=[admin_email],
         )
         
-        # Уведомление пользователя
         messages.success(request, "Ваш запрос отправлен. Мы свяжемся с вами в ближайшее время.")
         return redirect("login")
 
