@@ -1,0 +1,24 @@
+.page-title {
+    position: sticky;
+    top: 60px; /* Высота header */
+    z-index: 10; /* Поверх таблицы */
+    background-color: #fff;
+    padding: 10px 0;
+    margin: 0;
+}
+
+/* Контейнер таблицы с прокруткой */
+.table-container {
+    max-height: calc(100vh - 120px); /* Высота окна минус высота header и h3 */
+    overflow-y: auto; /* Вертикальная прокрутка */
+    margin-top: 10px;
+}
+
+/* Фиксированный заголовок таблицы */
+.table-container thead tr {
+    position: sticky;
+    top: 0; /* Высота header + h3 */
+    z-index: 5;
+    background-color: #f8f9fa;
+    
+}

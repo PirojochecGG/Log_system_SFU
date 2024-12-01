@@ -1,0 +1,111 @@
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 4591
+"GET /static/img/eye-icon.png HTTP/1.1" 404 1862
+"GET /static/img/eye-icon.png HTTP/1.1" 404 1862
+"GET /static/img/eye-off-icon.png HTTP/1.1" 404 1874
+"GET /static/img/eye-icon.png HTTP/1.1" 404 1862
+Invalid HTTP_HOST header: '192.168.0.102'. You may need to add '192.168.0.102' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "E:\projects-in-various-programming-languages\project_kotov\Log_system_SFU2\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\projects-in-various-programming-languages\project_kotov\Log_system_SFU2\.venv\Lib\site-packages\django\utils\deprecation.py", line 128, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\projects-in-various-programming-languages\project_kotov\Log_system_SFU2\.venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\projects-in-various-programming-languages\project_kotov\Log_system_SFU2\.venv\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.0.102'. You may need to add '192.168.0.102' to ALLOWED_HOSTS.
+Bad Request: /
+"GET / HTTP/1.0" 400 73673
+Invalid HTTP_HOST header: '192.168.0.102'. You may need to add '192.168.0.102' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "E:\projects-in-various-programming-languages\project_kotov\Log_system_SFU2\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\projects-in-various-programming-languages\project_kotov\Log_system_SFU2\.venv\Lib\site-packages\django\utils\deprecation.py", line 128, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\projects-in-various-programming-languages\project_kotov\Log_system_SFU2\.venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\projects-in-various-programming-languages\project_kotov\Log_system_SFU2\.venv\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.0.102'. You may need to add '192.168.0.102' to ALLOWED_HOSTS.
+Bad Request: /favicon.ico
+"GET /favicon.ico HTTP/1.0" 400 73006
+Invalid HTTP_HOST header: '192.168.0.102'. You may need to add '192.168.0.102' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "E:\projects-in-various-programming-languages\project_kotov\Log_system_SFU2\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\projects-in-various-programming-languages\project_kotov\Log_system_SFU2\.venv\Lib\site-packages\django\utils\deprecation.py", line 128, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\projects-in-various-programming-languages\project_kotov\Log_system_SFU2\.venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\projects-in-various-programming-languages\project_kotov\Log_system_SFU2\.venv\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.0.102'. You may need to add '192.168.0.102' to ALLOWED_HOSTS.
+Bad Request: /
+"GET / HTTP/1.0" 400 73744
+Invalid HTTP_HOST header: '192.168.0.102'. You may need to add '192.168.0.102' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "E:\projects-in-various-programming-languages\project_kotov\Log_system_SFU2\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\projects-in-various-programming-languages\project_kotov\Log_system_SFU2\.venv\Lib\site-packages\django\utils\deprecation.py", line 128, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\projects-in-various-programming-languages\project_kotov\Log_system_SFU2\.venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\projects-in-various-programming-languages\project_kotov\Log_system_SFU2\.venv\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.0.102'. You may need to add '192.168.0.102' to ALLOWED_HOSTS.
+Bad Request: /favicon.ico
+"GET /favicon.ico HTTP/1.0" 400 73077
+Invalid HTTP_HOST header: '192.168.0.102'. You may need to add '192.168.0.102' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "E:\projects-in-various-programming-languages\project_kotov\Log_system_SFU2\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\projects-in-various-programming-languages\project_kotov\Log_system_SFU2\.venv\Lib\site-packages\django\utils\deprecation.py", line 128, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\projects-in-various-programming-languages\project_kotov\Log_system_SFU2\.venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\projects-in-various-programming-languages\project_kotov\Log_system_SFU2\.venv\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.0.102'. You may need to add '192.168.0.102' to ALLOWED_HOSTS.
+Bad Request: /
+"GET / HTTP/1.0" 400 73453
+Invalid HTTP_HOST header: '192.168.0.102'. You may need to add '192.168.0.102' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "E:\projects-in-various-programming-languages\project_kotov\Log_system_SFU2\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\projects-in-various-programming-languages\project_kotov\Log_system_SFU2\.venv\Lib\site-packages\django\utils\deprecation.py", line 128, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\projects-in-various-programming-languages\project_kotov\Log_system_SFU2\.venv\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "E:\projects-in-various-programming-languages\project_kotov\Log_system_SFU2\.venv\Lib\site-packages\django\http\request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.0.102'. You may need to add '192.168.0.102' to ALLOWED_HOSTS.
+Bad Request: /favicon.ico
+"GET /favicon.ico HTTP/1.0" 400 73077
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.0" 404 4590
+"GET /static/img/eye-icon.png HTTP/1.0" 404 1861
+Bad Request: /add_product/
+"POST /add_product/ HTTP/1.0" 400 78
+Bad Request: /add_product/
+"POST /add_product/ HTTP/1.0" 400 569
+Bad Request: /add_product/
+"POST /add_product/ HTTP/1.0" 400 76

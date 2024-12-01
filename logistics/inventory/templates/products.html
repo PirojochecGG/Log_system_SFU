@@ -1,33 +1,39 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}Товары{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/products.css' %}">
+{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
-    <h3>Общее количество товаров</h3>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Код</th>
-                <th>Название</th>
-                <th>Общее количество</th>
-                <th>Единица измерения</th>
-                <th>Цена (руб)</th>
-                <th>Общая стоимость (руб)</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for product in products %}
-            <tr>
-                <td>{{ product.code }}</td>
-                <td>{{ product.name }}</td>
-                <td>{{ product.quantity }}</td>
-                <td>{{ product.unit }}</td>
-                <td>{{ product.price }}</td>
-                <td>{{ product.total_price }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <h3 class="page-title">Общее количество товаров</h3>
+    <div class="table-container">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Код</th>
+                    <th>Название</th>
+                    <th>Общее количество</th>
+                    <th>Единица измерения</th>
+                    <th>Цена (руб)</th>
+                    <th>Общая стоимость (руб)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <td>{{ product.code }}</td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.quantity }}</td>
+                    <td>{{ product.unit }}</td>
+                    <td>{{ product.price }}</td>
+                    <td>{{ product.total_price }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}

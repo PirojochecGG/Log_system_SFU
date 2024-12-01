@@ -8,6 +8,7 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '192.168.0.101',
+    '192.168.0.102',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -19,6 +20,9 @@ CSRF_TRUSTED_ORIGINS = [
     
     'https://192.168.0.101',
     'http://192.168.0.101',
+    
+    'https://192.168.0.102',
+    'http://192.168.0.102',
 ]
 
 
@@ -107,6 +111,26 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file_price_discrepancies': {
+            'level': 'WARNING',
+            'class': 'logging.FileHandler',
+            'filename': 'price_discrepancies.log',
+            'encoding': 'utf-8',
+        },
+    },
+    'loggers': {
+        'price_discrepancies': {
+            'handlers': ['file_price_discrepancies'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+    },
+}
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'

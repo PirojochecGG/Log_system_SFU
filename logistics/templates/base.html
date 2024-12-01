@@ -10,10 +10,21 @@
     <script src="{% static 'js/session_keepalive.js' %}" defer></script>
     {% block extra_css %}{% endblock %}
     {% block extra_js %}{% endblock %}
+    <style>
+        /* Фиксация header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 9;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
 <body>
     {% if show_header %}
-    <header class="bg-light py-2 mb-4">
+    <header class="bg-light py-2">
         <div class="container d-flex justify-content-between align-items-center">
             <nav>
                 <a href="/products" class="me-3">Товары</a>

@@ -1,15 +1,19 @@
-import json
+import json, logging
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from inventory.models import Operation, Product
 from django.core.mail import send_mail
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import IntegerField
+from django.db.models.functions import Cast
 from datetime import datetime
+from decimal import Decimal
 from .models import Operation, Product, OperationProduct
+
+price_discrepancy_logger = logging.getLogger('price_discrepancies')
 
 @login_required
 def products_view(request):
@@ -22,7 +26,9 @@ def products_view(request):
 
 @login_required
 def prihod(request):
-    operations = Operation.objects.filter(type='приход').order_by('date')
+    operations = Operation.objects.filter(type='приход') \
+        .annotate(number_as_int=Cast('number', IntegerField())) \
+        .order_by('number_as_int')
     context = {
         'show_header' : True,
         'operations': operations
@@ -104,74 +110,65 @@ def password_reset(request):
 
     return render(request, "password_reset.html")
 
-@csrf_exempt # переделать сильно нужно будет
+@login_required
+@csrf_exempt
 def add_product(request):
     if request.method == "POST":
         try:
             data = json.loads(request.body)
             qr_data = data.get("qr_data")
-                        
-            # Разделяем строки QR-кода
+            
             lines = qr_data.strip().split('\n')
             
-            # Обработка первой строки (данные операции)
             operation_info = lines[0].split(';')
-            number, date, doc_date, operation_type, total_amount, amount_no_vat, partial_amount, counterparty, storage_location, no = operation_info
+            (
+                number, date, doc_date, operation_type, 
+                counterparty, storage_location, _no
+            ) = operation_info
 
-            # Создаем запись об операции
             operation = Operation.objects.create(
                 number=number,
-                date=date,
+                date=datetime.strptime(date, '%Y-%m-%d'),
                 doc_date=datetime.strptime(doc_date, '%Y-%m-%d'),
                 type=operation_type,
-                total_amount=total_amount,
-                amount_no_vat=amount_no_vat,
-                partial_amount=partial_amount,
                 counterparty=counterparty,
                 storage_location=storage_location
             )
-            print(operation)
-            
-            # Обработка оставшихся строк (данные о товарах)
+
             for product_line in lines[1:]:
                 product_info = product_line.split(';')
 
-                code, name, quantity, unit, price, no = product_info
+                code, name, quantity, unit, price, _no = product_info
                 
-                quantity=float(quantity)
-                price=float(price)
-                total_price=quantity * price
-                
-                # Проверяем, существует ли товар с таким кодом
-                existing_product = Product.objects.filter(code=code).first()
-                
-                if existing_product:
-                    # Если товар существует, обновляем его актуальные данные
-                    existing_product.quantity += quantity
-                    existing_product.total_price += total_price
-                    existing_product.save()
+                quantity = Decimal(quantity)
+                price = price
 
-                    # Привязываем существующий товар к новой операции
-                    Product.objects.create(
-                        operation=operation,
-                        code=code,
-                        name=existing_product.name,
-                        quantity=quantity,
-                        unit=unit,
-                        price=price,
-                        total_price=total_price
+                product, created = Product.objects.get_or_create(
+                    code=code,
+                    defaults={
+                        'name': name,
+                        'quantity': 0,
+                        'unit': unit,
+                        'price': price
+                    }
+                )
+
+                if not created and product.price != price:
+                    price_discrepancy_logger.warning(
+                        f"Несоответствие цены для товара {code} ({name}): "
+                        f"в базе {product.price}, в QR-коде {price}. "
+                        f"Обновляем цену в БД."
                     )
-                else:
-                    # Если товар не существует, создаём новую запись
-                    Product.objects.create(
-                        operation=operation,
-                        code=code,
-                        name=name,
-                        quantity=quantity,
-                        unit=unit,
-                        price=price,
-                        total_price=total_price
-                    )
+                    product.price = price
+                
+                product.quantity += quantity
+                product.save()
+                
+                OperationProduct.objects.create(
+                    operation=operation,
+                    product=product,
+                    quantity=quantity
+                )
 
             return JsonResponse({"message": "Операция и товары успешно добавлены!"})
         except Exception as e:
