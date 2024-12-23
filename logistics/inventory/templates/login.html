@@ -19,8 +19,8 @@
             <input type="email" name="email" placeholder="email" required id="id_email">
             <div class="password-container">
                 <input type="password" name="password" placeholder="Пароль" required id="id_password">
-                <button type="button" id="toggle-password-visibility">
-                    <img src="{% static 'img/eye-icon.png' %}" alt="Показать пароль">
+                <button type="button" id="toggle-password-visibility" aria-label="Показать/Скрыть пароль">
+                    <img src="{% static 'img/eye-slash.svg' %}" alt="Показать пароль">
                 </button>
             </div>
             <button type="submit">Войти</button>

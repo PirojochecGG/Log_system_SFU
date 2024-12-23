@@ -1,4 +1,6 @@
-import json, logging
+import json
+import urllib
+import logging
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
@@ -16,8 +18,37 @@ from .models import Operation, Product, OperationProduct
 price_discrepancy_logger = logging.getLogger('price_discrepancies')
 
 @login_required
+def search_products(request):
+    encoded_query = request.GET.get('query')
+    query = urllib.parse.unquote(encoded_query) if encoded_query else ''
+    
+    print('\n', query, '\n')
+    
+    field = request.GET.get('field')
+    
+    if query and field:
+        if field == "code":
+            products = Product.objects.filter(code__icontains=query).order_by('code')
+        elif field == "name":
+            products = Product.objects.filter(name__icontains=query).order_by('code')
+        elif field == "price":
+            try:
+                products = Product.objects.filter(price=float(query)).order_by('code')
+            except ValueError:
+                products = Product.objects.none()
+        else:
+            products = Product.objects.all().order_by('code')
+    else:
+        products = Product.objects.all().order_by('code')
+    
+    print(f"Найдено {len(products)} продуктов по запросу '{query}")
+    
+    return JsonResponse(list(products.values()), safe=False)
+    
+@login_required
 def products_view(request):
     products = Product.objects.all().order_by('code')
+    
     context = {
         'show_header' : True,
         'products': products

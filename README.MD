@@ -16,48 +16,56 @@ git clone https://github.com/SeIekpann/Log_system_SFU.git
 
 ## 📦 3. Установка зависимостей
 
-Убедитесь, что у вас установлен Node.js. Затем выполните команды:
+Убедитесь, что у вас установлен Python 3.12.7 и выше. Затем выполните команды:
 
 ```bash
-cd logistics-backend
-npm install
-cd ..\logistics-frontend
-npm install
+pip install requirements.txt
 ```
 
-## 📝 4. Настройка файла .env
+## 📝 4. Настройка файла settings.py
 
-Перейдите в каталог logistics-backend.
-Создайте файл .env.
+Перейдите в каталог logistics
+И создайте файл .env в любом текстовом редакторе.
 Заполните файл следующими данными:
 
 ```.env
-DB_USERNAME=your_username
-DB_PASSWORD=your_password
-DB_HOST=localhost
-DB_PORT=your_port
-DB_NAME=logistics_db
-JWT_SECRET=your_jwt_secret
+
+SECRET_KEY=django-insecure-ВашСекретныйКлюч
+DEBUG=на ваш выбор 
+
+# база данных
+NAME=имя вашей бд
+USER=имя пользователя
+PASSWORD=пароль пользователя
+HOST=хост бд
+PORT=порт бд
+
+# почта
+EMAIL_HOST_USER=
+EMAIL_HOST_PASSWORD=
+DEFAULT_FROM_EMAIL=
+ADMIN_EMAIL=
+
 ```
 
-🔑 Замените your_username, your_password и your_jwt_secret на ваши значения.
+🔑 Замените на ваши значения.
 
-## ▶️ 5. Запуск проекта. Запуск backend
-
-Перейди в каталог logistics-backend и выполни команду:
+## ▶️ 5. Выполнение миграций.
+Перейди в каталог logistics
 
 ```bash
-cd logistics-backend
-node app.js
+cd logistics
+python manage.py makemigrations
+python manage.py migrate
 ```
 
-## ▶️ 6. Запуск проекта. Запуск frontend
+## ▶️ 6. Запуск проекта.
 
-Перейди в каталог logistics-frontend и выполни команду:
+Перейди в каталог logistics
 
 ```bash
-cd logistics-frontend
-npm start
+cd logistics
+python manage.py runserver 9000
 ```
 
 ## 🎉 7. Успешный запуск

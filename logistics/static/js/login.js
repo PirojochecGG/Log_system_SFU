@@ -5,10 +5,10 @@ document.addEventListener("DOMContentLoaded", () => {
     togglePasswordButton.addEventListener("click", () => {
         if (passwordInput.type === "password") {
             passwordInput.type = "text";
-            togglePasswordButton.querySelector("img").src = "/static/img/eye-off-icon.png";
+            togglePasswordButton.querySelector("img").src = "/static/img/eye.svg";
         } else {
             passwordInput.type = "password";
-            togglePasswordButton.querySelector("img").src = "/static/img/eye-icon.png";
+            togglePasswordButton.querySelector("img").src = "/static/img/eye-slash.svg";
         }
     });
 });

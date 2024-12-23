@@ -63,7 +63,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
-    // Получение CSRF-токена из cookies
     function getCookie(name) {
         let cookieValue = null;
         if (document.cookie && document.cookie !== '') {
@@ -89,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         qrReader = new Html5Qrcode("qr-reader");
         qrReader.start(
-            { facingMode: "environment" }, // Запускаем заднюю камеру (если доступно)
+            { facingMode: "environment" },
             {
                 fps: 30,
                 qrbox: { width: 250, height: 250 },

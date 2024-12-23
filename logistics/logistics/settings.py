@@ -1,15 +1,14 @@
+import environ
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = 'django-insecure-yww5to2$un7t2wd)yjy9o5=^2n#9-%fr2$r-x%(somgtavzwx+'
-DEBUG = True
+env = environ.Env()
+environ.Env.read_env()
 
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    '192.168.0.101',
-    '192.168.0.102',
-]
+BASE_DIR = Path(__file__).resolve().parent.parent
+SECRET_KEY = env('SECRET_KEY')
+DEBUG = env.bool('DEBUG', default=False)
+
+ALLOWED_HOSTS = ['*']
 
 CSRF_TRUSTED_ORIGINS = [
     'https://localhost',
@@ -37,11 +36,11 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'adam.nake666@gmail.com'
-EMAIL_HOST_PASSWORD = 'isfo kywb dfag gdnl'
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 
-DEFAULT_FROM_EMAIL = 'adam.nake666@gmail.com'
-ADMIN_EMAIL = 'adam.nake666@gmail.com'
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
+ADMIN_EMAIL = env('ADMIN_EMAIL')
 
 # Application definition
 INSTALLED_APPS = [
@@ -88,11 +87,11 @@ WSGI_APPLICATION = 'logistics.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'logistics_db',
-        'USER': 'postgres',
-        'PASSWORD': 'pirog',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'NAME': env('NAME'),
+        'USER': env('USER'),
+        'PASSWORD': env('PASSWORD'),
+        'HOST': env('HOST'),
+        'PORT': env('PORT'),
     }
 }
 
