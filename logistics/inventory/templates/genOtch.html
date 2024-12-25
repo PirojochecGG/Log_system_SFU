@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Генерация отчёта{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/genOtch.css' %}">
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/genOtch.js' %}" defer></script>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>Генератор PDF и Excel файлов</h1>
+        <form id="file-form">
+            <label for="operation-id">ID операции:</label>
+            <input type="text" id="operation-id" name="operation-id" required>
+
+            <button type="button" id="generate-pdf">Сгенерировать PDF</button>
+            <button type="button" id="generate-excel">Сгенерировать Excel</button>
+        </form>
+    </div>
+{% endblock %}

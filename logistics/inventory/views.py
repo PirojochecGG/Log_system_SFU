@@ -1,23 +1,27 @@
 import json
 import urllib
 import logging
-from django.http import JsonResponse
+import io
+import xlsxwriter
+from django.http import JsonResponse, FileResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_protect
 from django.db.models import IntegerField
 from django.db.models.functions import Cast
 from datetime import datetime
 from decimal import Decimal
+from reportlab.pdfgen import canvas
 from .models import Operation, Product, OperationProduct
 
 price_discrepancy_logger = logging.getLogger('price_discrepancies')
 
 @login_required
+@csrf_protect
 def search_products(request):
     encoded_query = request.GET.get('query')
     query = urllib.parse.unquote(encoded_query) if encoded_query else ''
@@ -46,6 +50,7 @@ def search_products(request):
     return JsonResponse(list(products.values()), safe=False)
     
 @login_required
+@csrf_protect
 def products_view(request):
     products = Product.objects.all().order_by('code')
     
@@ -56,6 +61,7 @@ def products_view(request):
     return render(request, 'products.html', context)
 
 @login_required
+@csrf_protect
 def prihod(request):
     operations = Operation.objects.filter(type='приход') \
         .annotate(number_as_int=Cast('number', IntegerField())) \
@@ -67,6 +73,7 @@ def prihod(request):
     return render(request, 'prihod.html', context)
 
 @login_required
+@csrf_protect
 def rashod(request):
     operations = Operation.objects.filter(type='расход').order_by('date')
     context = {
@@ -76,6 +83,7 @@ def rashod(request):
     return render(request, 'rashod.html', context)
 
 @login_required
+@csrf_protect
 def get_products_by_operation(request, operation_id):
     operation = get_object_or_404(Operation, id=operation_id)
     
@@ -95,9 +103,11 @@ def get_products_by_operation(request, operation_id):
 
     return JsonResponse({'products': products_data})
 
+@csrf_protect
 def welcome(request):
     return render(request, 'welcome.html', {'show_header': False})
 
+@csrf_protect
 def login_view(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -113,6 +123,7 @@ def login_view(request):
            messages.error(request, 'Неверный email или пароль')
     return render(request, 'login.html', {'show_header': False})
 
+@csrf_protect
 def password_reset(request):
     if request.method == "POST":
         first_name = request.POST.get("first_name")
@@ -142,7 +153,7 @@ def password_reset(request):
     return render(request, "password_reset.html")
 
 @login_required
-@csrf_exempt
+@csrf_protect
 def add_product(request):
     if request.method == "POST":
         try:
@@ -205,3 +216,61 @@ def add_product(request):
         except Exception as e:
             print(str(e))
             return JsonResponse({"error": str(e)}, status=400)
+   
+@login_required
+@csrf_protect
+def generate_reports_view(request):
+    return render(request, 'genOtch.html', {'show_header': True})  
+        
+@login_required
+@csrf_protect
+def generate_pdf_report(request):
+    operation_id = request.GET.get('operation_id')
+    operation = get_object_or_404(Operation, id=operation_id)
+    operation_products = OperationProduct.objects.filter(operation=operation).select_related('product')
+
+    buffer = io.BytesIO()
+    p = canvas.Canvas(buffer)
+    
+    p.drawString(100, 800, f"Отчет по операции {operation.number}")
+    p.drawString(100, 780, f"Дата: {operation.date}")
+    p.drawString(100, 760, f"Контрагент: {operation.counterparty}")
+    
+    y = 740
+    for op in operation_products:
+        p.drawString(100, y, f"{op.product.name} - {op.quantity} {op.product.unit} - {op.product.price} руб.")
+        y -= 20
+    
+    p.showPage()
+    p.save()
+    
+    buffer.seek(0)
+    return FileResponse(buffer, as_attachment=True, filename='report.pdf')
+
+@login_required
+@csrf_protect
+def generate_excel_report(request):
+    operation_id = request.GET.get('operation_id')
+    operation = get_object_or_404(Operation, id=operation_id)
+    operation_products = OperationProduct.objects.filter(operation=operation).select_related('product')
+
+    output = io.BytesIO()
+    workbook = xlsxwriter.Workbook(output, {'in_memory': True})
+    worksheet = workbook.add_worksheet()
+    
+    worksheet.write('A1', f"Отчет по операции {operation.number}")
+    worksheet.write('A2', f"Дата: {operation.date}")
+    worksheet.write('A3', f"Контрагент: {operation.counterparty}")
+    
+    row = 4
+    for op in operation_products:
+        worksheet.write(row, 0, op.product.name)
+        worksheet.write(row, 1, op.quantity)
+        worksheet.write(row, 2, op.product.unit)
+        worksheet.write(row, 3, op.product.price)
+        row += 1
+    
+    workbook.close()
+    
+    output.seek(0)
+    return FileResponse(output, as_attachment=True, filename='report.xlsx')

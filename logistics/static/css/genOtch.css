@@ -1,0 +1,30 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+#file-form {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+#file-form label, #file-form input, #file-form textarea, #file-form button {
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+#generate-pdf, #generate-excel {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#generate-pdf:hover, #generate-excel:hover {
+    background-color: #45a049;
+}

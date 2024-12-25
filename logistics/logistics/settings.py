@@ -1,8 +1,14 @@
 import environ
 from pathlib import Path
+import os
 
 env = environ.Env()
-environ.Env.read_env()
+env_file = os.path.join(Path(__file__).resolve().parent, '.env')
+
+if os.path.exists(env_file):
+    environ.Env.read_env(env_file)
+else:
+    raise FileNotFoundError(f"Файл .env не найден по пути: {env_file}")
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env('SECRET_KEY')
