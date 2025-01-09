@@ -1,60 +1,30 @@
-document.getElementById('generate-pdf').addEventListener('click', function() {
-    const operationId = document.getElementById('operation-id').value;
-    fetch(`/generate_pdf_report/?operation_id=${operationId}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken')
-        }
-    })
-    .then(response => response.blob())
-    .then(blob => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.style.display = 'none';
-        a.href = url;
-        a.download = 'report.pdf';
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-    })
-    .catch(error => console.error('Error:', error));
-});
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector("#report-form");
+    const input = document.querySelector("#operation_number");
+    const errorMessage = document.querySelector("#error-message");
+    const submitButton = document.querySelector("#submit-button");
+    const loadingSpinner = document.querySelector("#loading-spinner");
 
-document.getElementById('generate-excel').addEventListener('click', function() {
-    const operationId = document.getElementById('operation-id').value;
-    fetch(`/generate_excel_report/?operation_id=${operationId}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken')
-        }
-    })
-    .then(response => response.blob())
-    .then(blob => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.style.display = 'none';
-        a.href = url;
-        a.download = 'report.xlsx';
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-    })
-    .catch(error => console.error('Error:', error));
-});
+    // Прячем спиннер при загрузке страницы
+    loadingSpinner.classList.add("hidden");
 
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
+    form.addEventListener("submit", (event) => {
+        // Очищаем сообщение об ошибке
+        errorMessage.textContent = "";
+
+        // Получаем значение из поля ввода и удаляем лишние пробелы
+        const operationNumber = input.value.trim();
+
+        // Валидация: номер операции должен быть числом от 1 до 20 символов
+        if (!/^\d{1,20}$/.test(operationNumber)) {
+            event.preventDefault(); // Останавливаем отправку формы
+            errorMessage.textContent = "Номер операции должен быть числом от 1 до 20 символов.";
+            input.focus();
+            return;
         }
-    }
-    return cookieValue;
-}
+
+        // Показываем спиннер
+        loadingSpinner.classList.remove("hidden");
+        submitButton.disabled = true; // Блокируем кнопку отправки
+    });
+});

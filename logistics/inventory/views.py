@@ -1,9 +1,9 @@
 import json
 import urllib
 import logging
-import io
 import xlsxwriter
-from django.http import JsonResponse, FileResponse
+from io import BytesIO
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
@@ -15,7 +15,6 @@ from django.db.models import IntegerField
 from django.db.models.functions import Cast
 from datetime import datetime
 from decimal import Decimal
-from reportlab.pdfgen import canvas
 from .models import Operation, Product, OperationProduct
 
 price_discrepancy_logger = logging.getLogger('price_discrepancies')
@@ -219,58 +218,55 @@ def add_product(request):
    
 @login_required
 @csrf_protect
-def generate_reports_view(request):
-    return render(request, 'genOtch.html', {'show_header': True})  
+def report_form(request):
+    if request.method == 'POST':
+        # Получаем номер операции из формы
+        operation_number = request.POST.get('operation_number')
         
-@login_required
-@csrf_protect
-def generate_pdf_report(request):
-    operation_id = request.GET.get('operation_id')
-    operation = get_object_or_404(Operation, id=operation_id)
-    operation_products = OperationProduct.objects.filter(operation=operation).select_related('product')
+        # Проверяем наличие операции
+        operation = get_object_or_404(Operation, number=operation_number)
+        
+        # Создаем Excel-отчет
+        output = BytesIO()
+        workbook = xlsxwriter.Workbook(output, {'in_memory': True})
+        worksheet = workbook.add_worksheet("Отчет")
+        
+        # Стили
+        bold = workbook.add_format({'bold': True})
+        
+        # Заголовки
+        worksheet.write('A1', 'Номер операции', bold)
+        worksheet.write('B1', 'Дата операции', bold)
+        worksheet.write('C1', 'Тип операции', bold)
+        worksheet.write('D1', 'Контрагент', bold)
+        worksheet.write('E1', 'Товары', bold)
+        
+        # Данные операции
+        worksheet.write('A2', operation.number)
+        worksheet.write('B2', operation.date.strftime('%Y-%m-%d %H:%M:%S'))
+        worksheet.write('C2', operation.get_type_display())
+        worksheet.write('D2', operation.counterparty)
+        
+        # Данные товаров
+        row = 4
+        worksheet.write('E3', 'Товары', bold)
+        worksheet.write('F3', 'Количество', bold)
+        worksheet.write('G3', 'Цена за единицу', bold)
+        worksheet.write('H3', 'Общая цена', bold)
 
-    buffer = io.BytesIO()
-    p = canvas.Canvas(buffer)
-    
-    p.drawString(100, 800, f"Отчет по операции {operation.number}")
-    p.drawString(100, 780, f"Дата: {operation.date}")
-    p.drawString(100, 760, f"Контрагент: {operation.counterparty}")
-    
-    y = 740
-    for op in operation_products:
-        p.drawString(100, y, f"{op.product.name} - {op.quantity} {op.product.unit} - {op.product.price} руб.")
-        y -= 20
-    
-    p.showPage()
-    p.save()
-    
-    buffer.seek(0)
-    return FileResponse(buffer, as_attachment=True, filename='report.pdf')
+        for product in operation.operation_products.all():
+            worksheet.write(row, 4, product.product.name)
+            worksheet.write(row, 5, float(product.quantity))
+            worksheet.write(row, 6, float(product.product.price))
+            worksheet.write(row, 7, float(product.quantity * product.product.price))
+            row += 1
 
-@login_required
-@csrf_protect
-def generate_excel_report(request):
-    operation_id = request.GET.get('operation_id')
-    operation = get_object_or_404(Operation, id=operation_id)
-    operation_products = OperationProduct.objects.filter(operation=operation).select_related('product')
+        workbook.close()
+        output.seek(0)
 
-    output = io.BytesIO()
-    workbook = xlsxwriter.Workbook(output, {'in_memory': True})
-    worksheet = workbook.add_worksheet()
-    
-    worksheet.write('A1', f"Отчет по операции {operation.number}")
-    worksheet.write('A2', f"Дата: {operation.date}")
-    worksheet.write('A3', f"Контрагент: {operation.counterparty}")
-    
-    row = 4
-    for op in operation_products:
-        worksheet.write(row, 0, op.product.name)
-        worksheet.write(row, 1, op.quantity)
-        worksheet.write(row, 2, op.product.unit)
-        worksheet.write(row, 3, op.product.price)
-        row += 1
-    
-    workbook.close()
-    
-    output.seek(0)
-    return FileResponse(output, as_attachment=True, filename='report.xlsx')
+        # Возвращаем файл
+        response = HttpResponse(output, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = f'attachment; filename="operation_{operation_number}.xlsx"'
+        return response
+
+    return render(request, 'genOtch.html', {'show_header': True})  

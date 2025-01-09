@@ -12,14 +12,18 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container">
-        <h1>Генератор PDF и Excel файлов</h1>
-        <form id="file-form">
-            <label for="operation-id">ID операции:</label>
-            <input type="text" id="operation-id" name="operation-id" required>
-
-            <button type="button" id="generate-pdf">Сгенерировать PDF</button>
-            <button type="button" id="generate-excel">Сгенерировать Excel</button>
+    <div class="container report">
+        <h1>Генератор Excel файлов</h1>
+        <form action="{% url 'generate_report_form' %}" method="post" id="report-form">
+            {% csrf_token %}
+            <label for="operation_number">Введите номер операции:</label>
+            <input type="text" id="operation_number" name="operation_number" required>
+            <span id="error-message" class="error"></span>
+            <button type="submit" id="submit-button">Сгенерировать отчет</button>
         </form>
+        <div id="loading-spinner" class="loading hidden">
+            <div class="spinner"></div>
+            <p>Генерация отчета...</p>
+        </div>
     </div>
 {% endblock %}
